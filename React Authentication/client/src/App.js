@@ -12,20 +12,22 @@ import Authenticated from "./components/Authenticated";
 import withContext from "./Context";
 
 /**
- * This connects the UserSignUp component to context.
- * In other words, UserSignUp is now a consuming component that's subscribed to all context changes.
+ * This connects the components to context.
+ * In other words, the components are now a consuming component that's subscribed to all context changes.
  */
 const UserSignUpWithContext = withContext(UserSignUp);
+const UserSignInWithContext = withContext(UserSignIn);
+const HeaderWithContext = withContext(Header);
 
 export default () => (
   <Router>
     <div>
-      <Header />
+      <HeaderWithContext />
 
       <Switch>
         <Route exact path="/" component={Public} />
         <Route path="/authenticated" component={Authenticated} />
-        <Route path="/signin" component={UserSignIn} />
+        <Route path="/signin" component={UserSignInWithContext} />
         <Route path="/signup" component={UserSignUpWithContext} />
         <Route path="/signout" component={UserSignOut} />
         <Route component={NotFound} />

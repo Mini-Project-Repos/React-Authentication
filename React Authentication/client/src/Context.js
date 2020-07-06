@@ -16,9 +16,23 @@ export class Provider extends Component {
     this.data = new Data();
   }
 
+  state = {
+    authenticatedUser: null,
+  };
+
   render() {
+    const { authenticatedUser } = this.state;
+
     const value = {
+      authenticatedUser,
       data: this.data,
+      /*
+      Provider's value prop an actions object to store any event handlers
+      or actions you want to perform on data that's passed down through context.
+      */
+      actions: {
+        signIn: this.signIn,
+      },
     };
 
     console.log(value);
@@ -29,7 +43,27 @@ export class Provider extends Component {
     );
   }
 
-  signIn = async () => {};
+  /**
+   * The signIn function is an asynchronous function that takes a username and password as arguments.
+   * signIn uses those credentials to call the getUser() method in Data.js, which makes a GET request
+   * to the protected /users route on the server and returns the user data.
+   *
+   * @param {*} username
+   * @param {*} password
+   *
+   * @returns user
+   */
+  signIn = async (username, password) => {
+    const user = await this.data.getUser(username, password);
+    if (user !== null) {
+      this.setState(() => {
+        return {
+          authenticatedUser: user,
+        };
+      });
+    }
+    return user;
+  };
 
   signOut = () => {};
 }

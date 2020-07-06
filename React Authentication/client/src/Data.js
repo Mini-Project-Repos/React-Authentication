@@ -47,6 +47,26 @@ export default class Data {
      * request header to the Basic Authentication type, followed by the encoded user credentials
      */
     if (requiresAuth) {
+      /**
+       * The btoa() method creates a base-64 encoded ASCII string from a "string" of data.
+       * We'll use btoa() to encode the username and password credentials passed to the api() method.
+       * The credentials will be passed as an object containing username and password properties.
+       *
+       * The Authorization request header should hold the credentials to authenticate the client with the server.
+       */
+      const encodedCredentials = btoa(
+        `${credentials.username}:${credentials.password}`
+      );
+
+      /**
+       * We'll set an Authorization header on each request that requires authentication by adding an Authorization
+       * property to the headers object. You add new properties to existing JavaScript objects the same way you
+       * modify them.
+       *
+       * Example of the authorization header sent:
+       * Authorization: Basic am9lQHNtaXRoLmNvbTpqb2U=
+       */
+      options.headers["authorization"] = ` Basic ${encodedCredentials}`;
     }
 
     /**
@@ -61,8 +81,12 @@ export default class Data {
    * Makes a GET request to the /users endpoint, and returns a JSON object containing user credentials.
    */
 
-  async getUser() {
-    const response = await this.api(`/users`, "GET", null);
+  async getUser(username, password) {
+    const response = await this.api(`/users`, "GET", null, true, {
+      username,
+      password,
+    });
+
     if (response.status === 200) {
       return response.json().then((data) => data);
     } else if (response.status === 401) {
@@ -73,7 +97,7 @@ export default class Data {
   }
 
   /**
-   * @param {user} user
+   * @param {user} user - user data
    * Makes a POST request, sending new user data to the /users endpoint.
    */
   async createUser(user) {
