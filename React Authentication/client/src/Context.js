@@ -32,10 +32,9 @@ export class Provider extends Component {
       */
       actions: {
         signIn: this.signIn,
+        signOut: this.signOut,
       },
     };
-
-    console.log(value);
 
     return (
       //value represents an object containing the context to be shared throughout the component tree.
@@ -65,7 +64,10 @@ export class Provider extends Component {
     return user;
   };
 
-  signOut = () => {};
+  // Function to sign a user out
+  signOut = () => {
+    this.setState({ authenticatedUser: null });
+  };
 }
 
 export const Consumer = Context.Consumer;
