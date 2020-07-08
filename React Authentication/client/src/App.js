@@ -37,7 +37,7 @@ export default () => (
         <Route exact path="/" component={Public} />
         <PrivateRoute path="/authenticated" component={AuthWithContext} />
         {/* Redirect tester route */}
-        <PrivateRoute path="/settings" component={AuthWithContext} />
+        {/* <PrivateRoute path="/settings" component={AuthWithContext} /> */}
         <Route path="/signin" component={UserSignInWithContext} />
         <Route path="/signup" component={UserSignUpWithContext} />
         <Route path="/signout" component={UserSignOutWithContext} />

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Cookies from "js-cookie";
+
 import Data from "./Data";
 
 const Context = React.createContext();
@@ -17,7 +19,8 @@ export class Provider extends Component {
   }
 
   state = {
-    authenticatedUser: null,
+    //gets the cookie name "authenticatedUser"
+    authenticatedUser: Cookies.getJSON("authenticatedUser") || null,
   };
 
   render() {
@@ -60,13 +63,31 @@ export class Provider extends Component {
           authenticatedUser: user,
         };
       });
+      //set cookie
+      /**
+       * The first argument passed to Cookies.set() specifies the name of the cookie to set.
+       * Pass 'authenticatedUser' as the cookie name:
+       *
+       * The second argument specifies the value to store in the cookie.
+       * In this case, store the stringified user object:
+       *
+       * Pass Cookies.set() an object as the last argument to set additional cookie options
+       * -- for example, an expiration: Expires: 1 means that the cookie will expire after one day
+       */
+      Cookies.set("authenticatedUser", JSON.stringify(user), { expires: 1 });
     }
     return user;
   };
 
   // Function to sign a user out
   signOut = () => {
-    this.setState({ authenticatedUser: null });
+    this.setState(() => {
+      return {
+        authenticatedUser: null,
+      };
+    });
+    //pass the remove method the name of the cookie to delete
+    Cookies.remove("authenticatedUser");
   };
 }
 
