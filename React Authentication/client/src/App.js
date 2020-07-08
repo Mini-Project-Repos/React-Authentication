@@ -12,12 +12,20 @@ import Authenticated from "./components/Authenticated";
 import withContext from "./Context";
 
 /**
+ * The PrivateRoute component will serve as a high-order component for any routes that you want to protect and
+ * make accessible to authenticated users only. The component will either allow the user to continue to the
+ * specified private component, or redirect them to the sign in page if they are not logged in.
+ */
+import PrivateRoute from "./PrivateRoute";
+
+/**
  * This connects the components to context.
  * In other words, the components are now a consuming component that's subscribed to all context changes.
  */
 const UserSignUpWithContext = withContext(UserSignUp);
 const UserSignInWithContext = withContext(UserSignIn);
 const HeaderWithContext = withContext(Header);
+const AuthWithContext = withContext(Authenticated);
 
 export default () => (
   <Router>
@@ -26,7 +34,7 @@ export default () => (
 
       <Switch>
         <Route exact path="/" component={Public} />
-        <Route path="/authenticated" component={Authenticated} />
+        <PrivateRoute path="/authenticated" component={AuthWithContext} />
         <Route path="/signin" component={UserSignInWithContext} />
         <Route path="/signup" component={UserSignUpWithContext} />
         <Route path="/signout" component={UserSignOut} />
