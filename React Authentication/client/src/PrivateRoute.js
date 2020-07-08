@@ -18,14 +18,27 @@ export default ({ component: Component, ...rest }) => {
       {(context) => (
         <Route
           {...rest}
-          /**
-
-           */
           render={(props) =>
             context.authenticatedUser ? (
               <Component {...props} />
             ) : (
-              <Redirect to="/signin" />
+              <Redirect
+                to={{
+                  /**
+                  Redirects the user back to the page they were trying to get to after they log in
+
+                  The state property holds information about the user's current location (i.e., the current browser URL).
+                  That way, if authentication is successful, the router can redirect the user back to the original location 
+                  (from: props.location)
+
+                  Since pathname: '/signin' renders the UserSignIn component on redirect,
+                  you can access from via this.props.location.state.from within the UserSignIn component.
+
+                   */
+                  pathname: "/signin",
+                  state: { from: props.location },
+                }}
+              />
             )
           }
         />

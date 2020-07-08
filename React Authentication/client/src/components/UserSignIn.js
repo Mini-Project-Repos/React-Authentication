@@ -67,6 +67,15 @@ export default class UserSignIn extends Component {
    */
   submit = () => {
     const { context } = this.props;
+
+    /**
+     * The from variable passed to history.push(from) contains information about the pathname an unauthenticated
+     * user redirected from (via this.props.location.state). For example, if a user redirects to the sign up page
+     * from /settings, from will be equal to pathname: "/settings".
+     */
+    const { from } = this.props.location.state || {
+      from: { pathname: "/authenticated" },
+    };
     const { username, password } = this.state;
     /**
      * signIn() is an asynchronous operation that calls the getUser API method (written in Data.js)
@@ -82,7 +91,7 @@ export default class UserSignIn extends Component {
             return { errors: ["Sign-in was unsuccessful"] };
           });
         } else {
-          this.props.history.push("/authenticated");
+          this.props.history.push(from);
           console.log(`SUCCESS! ${username} is now signed in!`);
         }
       })
